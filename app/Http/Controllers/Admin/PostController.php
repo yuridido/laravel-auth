@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Post;
+
 
 class PostController extends Controller
 {
@@ -24,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.create');
     }
 
     /**
@@ -35,7 +39,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $request->validate([
+           'title'=>'required|min:5|max:10',
+           'body'=>'required|min:5|max:500',
+        ]);
+        $data['id'] = Auth::id();
+        $data['slug'] = Str::slug($data['title'], '-');
+        $newPost = new Post;
+        $newPost->fill($data);
+        $newPost->save();
+
     }
 
     /**
