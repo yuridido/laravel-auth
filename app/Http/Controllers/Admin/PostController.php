@@ -44,7 +44,7 @@ class PostController extends Controller
            'title'=>'required|min:5|max:10',
            'body'=>'required|min:5|max:500',
         ]);
-        $data['id'] = Auth::id();
+        $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title'], '-');
         $newPost = new Post;
         $newPost->fill($data);
