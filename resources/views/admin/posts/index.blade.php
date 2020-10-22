@@ -6,7 +6,7 @@
     {{ session('status') }}
 </div>
 @elseif (session('statusModifica'))
-<div class="alert alert-warning">
+<div class="alert alert-danger">
     {{ session('statusModifica') }}
 </div>
 @endif
