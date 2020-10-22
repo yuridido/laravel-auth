@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Post;
+use Illuminate\Http\Request;
 
 
 class PostController extends Controller
@@ -40,15 +40,17 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $request->validate([
-           'title'=>'required|min:5|max:10',
-           'body'=>'required|min:5|max:500',
+           'title'=>'required|min:5|max:50',
+           'body'=>'required|min:5|max:500'
         ]);
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title'], '-');
+
         $newPost = new Post;
         $newPost->fill($data);
-        $newPost->save();
+        $saved = $newPost->save();
 
     }
 

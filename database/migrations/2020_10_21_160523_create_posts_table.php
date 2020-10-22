@@ -15,11 +15,15 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->text('connection');
-            $table->text('queue');
-            $table->longText('payload');
-            $table->longText('exception');
-            $table->timestamp('failed_at')->useCurrent();
+            $table->string('title', 30)->unique();
+            $table->text('body', 500);
+            $table->string('slug', 30)->unique();
+            $table->timestamps();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
