@@ -18,7 +18,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        // $posts = Post::all();
+
+        $posts = Post::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -51,6 +54,7 @@ class PostController extends Controller
         $newPost = new Post;
         $newPost->fill($data);
         $saved = $newPost->save();
+        return redirect()->route('posts.index');
 
     }
 
@@ -71,9 +75,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -83,9 +87,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->all();
+        $data['slug'] = Str::slug($data['title'], '-');
+        $post->update($data);
+        return redirect()->route('posts.index')->with('statusModifica', 'Hai modificato correttamente il post con id' . $post->id);
     }
 
     /**
@@ -94,8 +101,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('posts.index')->with('status', 'Hai cancellato correttamente il post con id: ' . $post->id);
+
+
     }
 }

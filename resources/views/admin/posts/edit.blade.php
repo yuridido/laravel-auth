@@ -11,18 +11,18 @@
 </div>
 @endif
     <div class="container">
-        <form action="{{route('posts.store')}}" method="post">
+        <form action="{{route('posts.update', $post->id )}}" method="post">
             @csrf
-            @method('POST')
+            @method('PATCH')
             <div class="form-group">
                 <label for="title">Titolo</label>
-                <input type="text" name="title" id="title" class="form-control" aria-describedby="emailHelp">
+                <input type="text" name="title" id="title" class="form-control" value="{{ $post->title }}">
             </div>
             <div class="form-group">
                 <label for="body">Testo</label>
-                <textarea class="form-control" id="body" name="body" rows="5"></textarea>
+                <textarea class="form-control" id="body" name="body" rows="5">{{ $post->body }}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Invia</button>
+            <button type="submit" class="btn btn-primary">Modifica</button>
         </form>
     </div>
 @endsection

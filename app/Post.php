@@ -13,7 +13,12 @@ class Post extends Model
         'user_id'
     ];
 
-    public function user() {
+    public function users() {
         return $this->belongsTo('App\User');
     }
+
+    public function tags() {
+        return $this->belongsToMany('App\Tag');
+    }
+
 }
