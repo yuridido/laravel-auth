@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Post;
 use App\Tag;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostController extends Controller
@@ -21,7 +23,7 @@ class PostController extends Controller
     {
         // $posts = Post::all();
 
-        $posts = Post::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $posts = Post::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -48,19 +50,32 @@ class PostController extends Controller
         $data = $request->all();
 
         $request->validate([
-           'title'=>'required|min:5|max:50',
-           'body'=>'required|min:5|max:500'
+           'title'=>'required|min:5|max:100',
+           'body'=>'required|min:5|max:500',
+           'img' => 'image'
         ]);
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title'], '-');
 
         $newPost = new Post;
+
+        if (!empty($data['img'])) {
+            $data['img'] = Storage::disk('public')->put('images', $data['img']);
+            //nel database salvo il percorso che creo con Storage
+            
+        }
+
+
         $newPost->fill($data);
 
 
 
         $saved = $newPost->save();
-        $newPost->tags()->attach($data['tags']);
+        if (!empty($newPost->tags())) {
+            $newPost->tags()->attach($data['tags']);
+        }
+
+
         return redirect()->route('posts.index');
 
     }
@@ -99,7 +114,16 @@ class PostController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Str::slug($data['title'], '-');
+        $data['updated_at'] = Carbon::now('Europe/Rome');
+        if (!empty($data['img'])) {
+            // if (!empy($post->img)) {
+            //     Storage::disk('public')->delete($post->img);
+            // }
+            $data['img'] = Storage::disk('public')->put('images', $data['img']);
+        }
         $post->tags()->sync($data['tags']);
+
+
         $post->update($data);
 
         return redirect()->route('posts.index')->with('statusModifica', 'Hai modificato correttamente il post con id' . $post->id);

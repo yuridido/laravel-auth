@@ -11,7 +11,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{route('posts.store')}}" method="post">
+        <form action="{{route('posts.store')}}" enctype="multipart/form-data" method="post">
             @csrf
             @method('POST')
             <div class="form-group">
@@ -19,11 +19,16 @@
                 <input type="text" name="title" id="title" class="form-control" aria-describedby="emailHelp">
             </div>
             <div class="form-group">
+                <label for="img">Uploda image</label>
+                <input type="file" name="img" class="form-control-file" id="img" accept="image/*">
+            </div>
+
+            <div class="form-group">
                 <label for="body">Testo</label>
                 <textarea class="form-control" id="body" name="body" rows="5"></textarea>
             </div>
             <div class="form-group">
-                @foreach ($tags as $tag)
+                @foreach($tags as $tag)
                 <label for="tag">{{ $tag->name }}</label>
                 <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
                 @endforeach

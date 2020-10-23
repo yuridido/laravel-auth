@@ -11,10 +11,16 @@
                 </ul>
             </div>
         @endif
-        <form action="{{route('posts.update', $post->id )}}" method="post">
+        <form action="{{route('posts.update', $post->id )}}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
+            <img src="{{  asset('storage/'. $post->img) }}" width="300px" alt="{{$post->slug}}">
+
             <div class="form-group">
+                <div class="form-group">
+                    <label for="img">Uploda image</label>
+                    <input type="file" name="img" class="form-control-file" id="img" accept="image/*">
+                </div>
                 <label for="title">Titolo</label>
                 <input type="text" name="title" id="title" class="form-control" value="{{ $post->title }}">
             </div>

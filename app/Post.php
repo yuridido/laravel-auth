@@ -10,10 +10,12 @@ class Post extends Model
         'title',
         'body',
         'slug',
-        'user_id'
+        'user_id',
+        'img',
+        'updated_at'
     ];
 
-    public function users() {
+    public function user() {
         return $this->belongsTo('App\User');
     }
 
