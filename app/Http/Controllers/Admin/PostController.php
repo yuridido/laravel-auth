@@ -62,13 +62,10 @@ class PostController extends Controller
         if (!empty($data['img'])) {
             $data['img'] = Storage::disk('public')->put('images', $data['img']);
             //nel database salvo il percorso che creo con Storage
-            
+
         }
 
-
         $newPost->fill($data);
-
-
 
         $saved = $newPost->save();
         if (!empty($newPost->tags())) {
